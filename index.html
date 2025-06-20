@@ -346,6 +346,23 @@
     setInterval(updateClock, 1000);
     setInterval(updateDates, 60000);
     setInterval(fetchPrayerTimesFromSheet, 60000);
+
+
+    // Slideshow logic
+let slideIndex = 0;
+const slides = document.querySelectorAll('.slide-container');
+
+function showNextSlide() {
+  if (slides.length === 0) return;
+
+  slides[slideIndex].classList.remove('active');
+  slideIndex = (slideIndex + 1) % slides.length;
+  slides[slideIndex].classList.add('active');
+}
+
+// Rotate slides every 5 seconds
+setInterval(showNextSlide, 5000);
+
   </script>
 </body>
 </html>
