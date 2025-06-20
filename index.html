@@ -287,81 +287,104 @@
     }
 
     async function fetchPrayerTimesFromSheet() {
-      const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
-      const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
-      try {
-        const res = await fetch(url);
-        const text = await res.text();
-        const json = JSON.parse(text.substr(47).slice(0, -2));
-        const rows = json.table.rows;
-        const today = new Date();
-        const todayStr = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
-        let row = rows.find(r => (r.c[0]?.f || r.c[0]?.v) === todayStr);
-        if (!row) {
-          document.getElementById("prayer-times").textContent = "No prayer times for today.";
-          return;
-        }
-        const names = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
-        const times = row.c.slice(1, 7).map(c => c?.f || c?.v || '');
-        const now = new Date();
-        const prayerTimes = times.map(timeStr => {
-          let [h, m] = timeStr.split(':').map(Number);
-          return new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
-        });
-        let nextPrayerIndex = prayerTimes.findIndex(t => t > now);
-        if (nextPrayerIndex === -1) nextPrayerIndex = 0;
-        const html = names.map((name, i) => {
-          return `<div class="${i === nextPrayerIndex ? 'highlight' : ''}" style="text-align:center;"><div>${name}</div><div>${times[i]}</div></div>`;
-        }).join('');
-        document.getElementById("prayer-times").innerHTML = html;
-      } catch (e) {
-        console.error("Failed to fetch prayer times:", e);
-        document.getElementById("prayer-times").textContent = "Failed to load prayer times.";
-      }
+  const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
+  const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
+  try {
+    const res = await fetch(url);
+    const text = await res.text();
+    const json = JSON.parse(text.substr(47).slice(0, -2));
+    const rows = json.table.rows;
+    const today = new Date();
+    // Format today in dd/mm/yyyy to match your sheet dates
+    const todayStr = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+    
+    // Find the row that matches today's date (dd/mm/yyyy)
+    let row = rows.find(r => {
+      const cellValue = r.c[0]?.f || r.c[0]?.v;
+      return cellValue === todayStr;
+    });
+    if (!row) {
+      document.getElementById("prayer-times").textContent = "No prayer times for today.";
+      return;
     }
 
-    async function loadWeeklyPrayerTimes() {
-      const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
-      const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
-      try {
-        const res = await fetch(url);
-        const text = await res.text();
-        const json = JSON.parse(text.substr(47).slice(0, -2));
-        const rows = json.table.rows;
-        const today = new Date();
-        const parsedRows = rows.map(r => {
-          const dateCell = r.c[0];
-          if (!dateCell) return null;
-          const parts = (dateCell.f || dateCell.v).split('/');
-          const date = new Date(+parts[2], parts[1]-1, +parts[0]);
-          return {
-            date,
-            dateStr: dateCell.f || dateCell.v,
-            times: r.c.slice(1, 7).map(c => c?.f || c?.v || '')
-          };
-        }).filter(r => r && r.date >= new Date(today.getFullYear(), today.getMonth(), today.getDate()));
-        const next7 = parsedRows.slice(0, 7);
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        thead.innerHTML = `<tr><th>Date</th><th>Fajr</th><th>Sunrise</th><th>Dhuhr</th><th>Asr</th><th>Maghrib</th><th>Isha</th></tr>`;
-        const tbody = document.createElement('tbody');
-        next7.forEach(r => {
-          const tr = document.createElement('tr');
-          if (r.date.toDateString() === today.toDateString()) tr.classList.add('highlight-row');
-          const dateDisplay = `${r.date.getDate().toString().padStart(2,'0')}/${(r.date.getMonth()+1).toString().padStart(2,'0')}/${r.date.getFullYear()}`;
-          tr.innerHTML = `<td>${dateDisplay}</td>${r.times.map(t => `<td>${t}</td>`).join('')}`;
-          tbody.appendChild(tr);
-        });
-        table.appendChild(thead);
-        table.appendChild(tbody);
-        const container = document.getElementById('prayer-table-placeholder');
-        container.innerHTML = '';
-        container.appendChild(table);
-      } catch (e) {
-        console.error('Failed loading weekly data', e);
-        document.getElementById("prayer-table-placeholder").textContent = "Failed to load weekly data.";
-      }
-    }
+    const names = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
+    const times = row.c.slice(1, 7).map(c => c?.f || c?.v || '');
+    const now = new Date();
+
+    // Parse prayer times into Date objects for today
+    const prayerTimes = times.map(timeStr => {
+      let [h, m] = timeStr.split(':').map(Number);
+      return new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
+    });
+
+    // Find the next prayer time after now
+    let nextPrayerIndex = prayerTimes.findIndex(t => t > now);
+    if (nextPrayerIndex === -1) nextPrayerIndex = 0;
+
+    // Build the HTML with highlight on next prayer only (no seconds here)
+    const html = names.map((name, i) => {
+      return `<div class="${i === nextPrayerIndex ? 'highlight' : ''}" style="text-align:center;">
+                <div>${name}</div>
+                <div>${times[i]}</div>
+              </div>`;
+    }).join('');
+    document.getElementById("prayer-times").innerHTML = html;
+  } catch (e) {
+    console.error("Failed to fetch prayer times:", e);
+    document.getElementById("prayer-times").textContent = "Failed to load prayer times.";
+  }
+}
+
+async function loadWeeklyPrayerTimes() {
+  const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
+  const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
+  try {
+    const res = await fetch(url);
+    const text = await res.text();
+    const json = JSON.parse(text.substr(47).slice(0, -2));
+    const rows = json.table.rows;
+    const today = new Date();
+
+    const parsedRows = rows.map(r => {
+      const dateCell = r.c[0];
+      if (!dateCell) return null;
+      // Parse date from dd/mm/yyyy format
+      const parts = (dateCell.f || dateCell.v).split('/');
+      const date = new Date(+parts[2], parts[1] - 1, +parts[0]);
+      return {
+        date,
+        dateStr: dateCell.f || dateCell.v,
+        times: r.c.slice(1, 7).map(c => c?.f || c?.v || '')
+      };
+    }).filter(r => r && r.date >= new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+
+    const next7 = parsedRows.slice(0, 7);
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    thead.innerHTML = `<tr><th>Date</th><th>Fajr</th><th>Sunrise</th><th>Dhuhr</th><th>Asr</th><th>Maghrib</th><th>Isha</th></tr>`;
+    const tbody = document.createElement('tbody');
+
+    next7.forEach(r => {
+      const tr = document.createElement('tr');
+      if (r.date.toDateString() === today.toDateString()) tr.classList.add('highlight-row');
+      const dateDisplay = `${r.date.getDate().toString().padStart(2, '0')}/${(r.date.getMonth() + 1).toString().padStart(2, '0')}/${r.date.getFullYear()}`;
+      tr.innerHTML = `<td>${dateDisplay}</td>${r.times.map(t => `<td>${t}</td>`).join('')}`;
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    const container = document.getElementById('prayer-table-placeholder');
+    container.innerHTML = '';
+    container.appendChild(table);
+  } catch (e) {
+    console.error('Failed loading weekly data', e);
+    document.getElementById("prayer-table-placeholder").textContent = "Failed to load weekly data.";
+  }
+}
+
 
     window.onload = function () {
       updateClock();
