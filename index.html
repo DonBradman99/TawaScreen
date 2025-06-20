@@ -184,27 +184,53 @@
       100% { box-shadow: 0 0 0 0 rgba(0, 51, 102, 0); }
     }
 
-    /* Weekly table styles */
-    #weekly-prayer-table table {
-      width: 100%;
-      height: 100%;
-      border-collapse: collapse;
-      font-size: 1.6em;
-    }
-    #weekly-prayer-table th, #weekly-prayer-table td {
-      border: 1px solid #ccc;
-      padding: 14px 6px;
-      text-align: center;
-    }
-    #weekly-prayer-table thead tr {
-  background-color: #007a99;
-  color: white;
+   /* Weekly Prayer Table - Modern Style */
+#weekly-prayer-table table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 1.4em;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 }
 
-    #weekly-prayer-table tbody tr.highlight-row {
-      background-color: #003366;
-      color: white;
-    }
+#weekly-prayer-table thead tr {
+  background-color: #007a99;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#weekly-prayer-table th,
+#weekly-prayer-table td {
+  padding: 16px 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+#weekly-prayer-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+#weekly-prayer-table tbody tr.highlight-row {
+  background-color: #003366;
+  color: white;
+  font-weight: bold;
+}
+
+#weekly-prayer-table th:first-child,
+#weekly-prayer-table td:first-child {
+  border-left: none;
+}
+
+#weekly-prayer-table th:last-child,
+#weekly-prayer-table td:last-child {
+  border-right: none;
+}
+
     /* Target only the specific slide that has the weekly prayer table */
 #weekly-prayer-table {
   position: relative;
