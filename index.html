@@ -381,12 +381,13 @@
 
         // Column indexes based on your sheet:
         // 0: Date, 1: Fajr, 2: Sunrise, 3: Duhur, 4: Asr, 5: Maghrib, 6: Isha
-        const fajr = todayRow.c[1]?.v || '';
-        const sunrise = todayRow.c[2]?.v || '';
-        const dhuhr = todayRow.c[3]?.v || '';
-        const asr = todayRow.c[4]?.v || '';
-        const maghrib = todayRow.c[5]?.v || '';
-        const isha = todayRow.c[6]?.v || '';
+        const fajr = todayRow.c[1]?.f || todayRow.c[1]?.v || '';
+        const sunrise = todayRow.c[2]?.f || todayRow.c[2]?.v || '';
+        const dhuhr = todayRow.c[3]?.f || todayRow.c[3]?.v || '';
+        const asr = todayRow.c[4]?.f || todayRow.c[4]?.v || '';
+        const maghrib = todayRow.c[5]?.f || todayRow.c[5]?.v || '';
+        const isha = todayRow.c[6]?.f || todayRow.c[6]?.v || '';
+
 
         const prayers = [
           { name: 'Fajr', time: fajr },
