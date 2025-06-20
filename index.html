@@ -376,7 +376,11 @@
           return {
             date,
             dateStr: dateCell.f || dateCell.v,
-            times: r.c.slice(1, 7).map(c => c?.f || c?.v || '')
+            times: r.c.slice(1, 7).map(c => {
+  const fullTime = c?.f || c?.v || '';
+  return fullTime.split(':').slice(0, 2).join(':'); // only hh:mm
+})
+
           };
         }).filter(r => r && r.date >= new Date(today.getFullYear(), today.getMonth(), today.getDate()));
         const next7 = parsedRows.slice(0, 7);
