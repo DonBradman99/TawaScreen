@@ -288,23 +288,25 @@
 
     // Build HTML
     const html = names.map((name, i) => {
-      // Strip seconds if present in time string
-      let displayTime = times[i];
-      if (displayTime.includes(':')) {
-        const parts = displayTime.split(':');
-        if (parts.length >= 2) {
-          displayTime = parts[0] + ':' + parts[1];
-        }
-      }
+  // Strip seconds if present in time string
+  let displayTime = times[i];
+  if (displayTime.includes(':')) {
+    const parts = displayTime.split(':');
+    if (parts.length >= 2) {
+      displayTime = parts[0] + ':' + parts[1];
+    }
+  }
 
-      return `
-  <div class="${upcoming ? 'highlight' : ''}" style="text-align: center;">
-    <div style="font-size: 0.9em;">${n}</div>
-    <div style="font-size: 1.1em;">${times[i]}</div>
-  </div>
-`;
+  const isNext = i === nextPrayerIndex;
 
-    }).join('');
+  return `
+    <div class="${isNext ? 'highlight' : ''}" style="text-align: center;">
+      <div style="font-size: 0.9em;">${name}</div>
+      <div style="font-size: 1.1em;">${displayTime}</div>
+    </div>
+  `;
+}).join('');
+
 
     document.getElementById("prayer-times").innerHTML = html;
 
