@@ -14,77 +14,99 @@
       font-weight: bold;
       margin: 0;
       padding: 0;
+      height: 100vh;
       overflow: hidden;
+      box-sizing: border-box;
+      position: relative;
+    }
+    #header {
+      width: 100%;
+      text-align: center;
+      padding: 1px 0;
+      position: fixed;
+      top: -8px;
+      left: 0;
+      z-index: 500;
     }
     h1 {
       font-family: 'Playfair Display', serif;
       font-size: 4em;
-      text-align: center;
-      margin: 0.3em 0 0.2em;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
       color: #003366;
     }
-    #clock {
-      text-align: center;
-      font-size: 3.5em;
-      color: #003366;
-      margin-bottom: 10px;
-      user-select: none;
-    }
-    #seconds {
-      display: none;
-    }
-    #main {
-      display: flex;
-      justify-content: space-between;
-      padding: 0 20px;
-    }
-    #left {
+    #left-panel {
+      position: fixed;
+      top: 10px;
+      left: 25px;
       width: 200px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 5px;
+      z-index: 900;
     }
-    #left img {
+    #logo, #side-image {
       width: 100%;
-      height: auto;
+      height: 230px;
+    }
+    #logo img, #side-image img {
+      width: 100%;
+      height: 100%;
       object-fit: contain;
     }
-    #prayer-times {
+    #clock {
+      margin-top: 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-size: 1.8em;
-      gap: 10px;
-      margin-top: 10px;
+      font-size: 5em;
+      color: #003366;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+      user-select: none;
+      margin-bottom: 20px;
     }
-    .highlight {
-      background-color: #003366;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 8px;
-      animation: pulse 2s infinite;
+    #time-top-line {
+      display: flex;
+      gap: 0.2em;
+      font-weight: bold;
     }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(0, 51, 102, 0.6); }
-      70% { box-shadow: 0 0 10px 10px rgba(0, 51, 102, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(0, 51, 102, 0); }
+    #seconds {
+      line-height: 1em;
+      font-weight: normal;
+      margin-top: 0.1em;
+      font-size: .7em;
+    }
+    #main-content {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     #slideshow {
-      width: 60%;
-      height: 500px;
+      width: 850px;
+      height: 600px;
       position: relative;
       overflow: hidden;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 3px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      background-color: white;
     }
     .slide-container {
       position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       opacity: 0;
       transition: opacity 1s ease-in-out;
+      padding: 20px;
+      box-sizing: border-box;
     }
     .slide-container.active {
       opacity: 1;
@@ -94,32 +116,94 @@
     .slide-container iframe {
       width: 100%;
       height: 100%;
-      object-fit: contain;
       border: none;
+      object-fit: contain;
     }
-    #weekly-prayer-table {
-      width: 100%;
-      height: 100%;
-      overflow-y: auto;
-      padding: 10px;
-      box-sizing: border-box;
+    #bottom-bar {
+      position: absolute;
+      bottom: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 1200px;
+      width: 95%;
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 24px;
+      font-size: 1.7em;
+      color: #222;
+      background: #f9f7f4;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+      font-weight: 600;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      backdrop-filter: blur(8px);
     }
+    #date-container, #bank-details {
+      white-space: nowrap;
+      border: 1px solid #ccc;
+      padding: 3px 8px;
+      border-radius: 5px;
+    }
+    #right-panel {
+      position: fixed;
+      top: 30px;
+      right: 10px;
+      width: 200px;
+      background: #f9f7f4;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+      padding: 12px 16px;
+      font-size: 1.6em;
+      color: #222;
+      font-weight: 600;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      z-index: 900;
+    }
+    #right-panel h2 {
+      font-size: 1.2em;
+      margin-bottom: 8px;
+      color: #003366;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4px;
+    }
+    #prayer-times {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 1.15em;
+    }
+    .highlight {
+      background-color: #003366 !important;
+      color: white !important;
+      padding: 3px 6px;
+      border-radius: 5px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(0, 51, 102, 0.6); }
+      70% { box-shadow: 0 0 10px 10px rgba(0, 51, 102, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 51, 102, 0); }
+    }
+
+    /* Weekly table styles */
     #weekly-prayer-table table {
       width: 100%;
+      height: 100%;
       border-collapse: collapse;
-      font-size: 1.2em;
+      font-size: 1.6em;
     }
-    #weekly-prayer-table th, td {
+    #weekly-prayer-table th, #weekly-prayer-table td {
       border: 1px solid #ccc;
-      padding: 8px;
+      padding: 14px 6px;
       text-align: center;
     }
-    #weekly-prayer-table thead {
-      background: #003366;
+    #weekly-prayer-table thead tr {
+      background-color: #003366;
       color: white;
     }
-    #weekly-prayer-table .highlight-row {
-      background: #003366;
+    #weekly-prayer-table tbody tr.highlight-row {
+      background-color: #003366;
       color: white;
       animation: pulse 2s infinite;
     }
@@ -127,169 +211,179 @@
 </head>
 <body>
 
-  <h1>Tawa Islamic Centre</h1>
-  <div id="clock">
-    <span id="hours"></span>:<span id="minutes"></span>
-    <div id="seconds"></div>
+  <div id="header"><h1>Tawa Islamic Centre</h1></div>
+
+  <div id="left-panel">
+    <div id="logo"><img src="logo.png" alt="Logo" /></div>
+    <div id="clock">
+      <div id="time-top-line">
+        <div id="hours"></div><div>:</div><div id="minutes"></div>
+      </div>
+      <div id="seconds"></div>
+    </div>
+    <div id="side-image"><img src="flag.jpg" alt="Flag" /></div>
   </div>
 
-  <div id="main">
-    <div id="left">
-      <img src="logo.png" alt="Logo" />
-      <img src="flag.jpg" alt="Flag" />
-      <div id="prayer-times">Loading...</div>
-    </div>
+  <div id="right-panel">
+    <h2 id="prayer-heading">Prayer Times</h2>
+    <div id="prayer-times">Loading...</div>
+  </div>
 
+  <div id="main-content">
     <div id="slideshow">
+      <!-- Slide 1: Welcome -->
       <div class="slide-container active">
         <img src="welcome.png" alt="Welcome" />
       </div>
+
+      <!-- Slide 2: Weekly Prayer Table -->
       <div class="slide-container">
         <div id="weekly-prayer-table">
-          <div style="text-align:center; font-size:1.5em; color:#003366; margin-bottom:10px;">Weekly Prayer Times</div>
-          <div id="prayer-table-placeholder">Loading weekly table...</div>
+          <h2 style="text-align:center; color:#003366; margin-bottom: 12px;">Prayer Times for the Next 7 Days</h2>
+          <div id="prayer-table-placeholder" style="height: 520px;">Loading weekly prayer times...</div>
         </div>
       </div>
+
+      <!-- Other Slides -->
+      <div class="slide-container">
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vTDQudPX6qWfceZb2HjmFRUbVPhsAki6no8zl0PhrOebp5nmot4uDS9YCohNwPP9Fc_NGTCIr46NPOv/pub?embedded=true" allowfullscreen></iframe>
+      </div>
+      <div class="slide-container">
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vTyXAgoO4vLLJaDVn0doQ5f6fyNFnzLThPGFw6eUcFnQosVzkU7cWxZL6cSZM7a_8a7dymRjZHMMM-Y/pub?embedded=true" allowfullscreen></iframe>
+      </div>
     </div>
+  </div>
+
+  <div id="bottom-bar">
+    <div id="date-container"><span id="english-date"></span> | <span id="islamic-date"></span></div>
+    <div id="bank-details">ASB Bank Account: <strong>12-3223-0160160-000</strong></div>
   </div>
 
   <script>
     function updateClock() {
       const now = new Date();
-      let h = now.getHours(), m = now.getMinutes();
+      let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+      const ampm = h >= 12 ? 'PM' : 'AM';
       h = h % 12 || 12;
       document.getElementById('hours').textContent = h.toString().padStart(2, '0');
       document.getElementById('minutes').textContent = m.toString().padStart(2, '0');
+      document.getElementById('seconds').textContent = s.toString().padStart(2, '0') + ' ' + ampm;
     }
 
-    async function fetchPrayerTimes() {
+    function updateDates() {
+      const now = new Date();
+      const day = now.getDate(), month = now.getMonth() + 1, year = now.getFullYear();
+      document.getElementById('english-date').textContent = `${day}/${month}/${year}`;
+      try {
+        document.getElementById('islamic-date').textContent = new Intl.DateTimeFormat('en-TN-u-ca-islamic', { month: 'long', year: 'numeric' }).format(now);
+      } catch {
+        document.getElementById('islamic-date').textContent = 'Islamic date not supported';
+      }
+    }
+
+    function setPrayerHeadingWithDay() {
+      const dayName = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][new Date().getDay()];
+      document.getElementById("prayer-heading").textContent = `${dayName} Prayer Times`;
+    }
+
+    async function fetchPrayerTimesFromSheet() {
       const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
       const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
-
       try {
         const res = await fetch(url);
         const text = await res.text();
         const json = JSON.parse(text.substr(47).slice(0, -2));
         const rows = json.table.rows;
-
         const today = new Date();
-        const todayStr = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
-
-        const row = rows.find(r => {
-          const cell = r.c[0];
-          if (!cell) return false;
-          const date = cell.f || cell.v;
-          return date === todayStr;
-        });
-
+        const todayStr = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+        let row = rows.find(r => (r.c[0]?.f || r.c[0]?.v) === todayStr);
         if (!row) {
-          document.getElementById("prayer-times").textContent = "No data for today.";
+          document.getElementById("prayer-times").textContent = "No prayer times for today.";
           return;
         }
-
         const names = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
-        const times = row.c.slice(1).map(c => c?.f || c?.v || '');
+        const times = row.c.slice(1, 7).map(c => c?.f || c?.v || '');
         const now = new Date();
-
-        const prayerDates = times.map(t => {
-          const [h, m] = t.split(':').map(Number);
+        const prayerTimes = times.map(timeStr => {
+          let [h, m] = timeStr.split(':').map(Number);
           return new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
         });
-
-        let nextIndex = prayerDates.findIndex(pt => pt > now);
-        if (nextIndex === -1) nextIndex = 0;
-
-        const html = names.map((name, i) => `
-          <div class="${i === nextIndex ? 'highlight' : ''}">
-            <div>${name}</div>
-            <div>${times[i]}</div>
-          </div>
-        `).join('');
-
+        let nextPrayerIndex = prayerTimes.findIndex(t => t > now);
+        if (nextPrayerIndex === -1) nextPrayerIndex = 0;
+        const html = names.map((name, i) => {
+          return `<div class="${i === nextPrayerIndex ? 'highlight' : ''}" style="text-align:center;"><div>${name}</div><div>${times[i]}</div></div>`;
+        }).join('');
         document.getElementById("prayer-times").innerHTML = html;
-
-      } catch (err) {
-        console.error(err);
-        document.getElementById("prayer-times").textContent = "Error loading.";
+      } catch (e) {
+        console.error("Failed to fetch prayer times:", e);
+        document.getElementById("prayer-times").textContent = "Failed to load prayer times.";
       }
     }
 
-    async function loadWeeklyPrayerTable() {
+    async function loadWeeklyPrayerTimes() {
       const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
       const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
-
       try {
         const res = await fetch(url);
         const text = await res.text();
         const json = JSON.parse(text.substr(47).slice(0, -2));
         const rows = json.table.rows;
-
         const today = new Date();
-        const parsed = rows.map(r => {
+        const parsedRows = rows.map(r => {
           const dateCell = r.c[0];
           if (!dateCell) return null;
-          const [day, month, year] = (dateCell.f || dateCell.v).split('/').map(Number);
-          const date = new Date(year, month - 1, day);
+          const parts = (dateCell.f || dateCell.v).split('/');
+          const date = new Date(+parts[2], parts[1]-1, +parts[0]);
           return {
             date,
-            dateStr: `${day}/${month}/${year}`,
-            times: r.c.slice(1).map(c => c?.f || c?.v || '')
+            dateStr: dateCell.f || dateCell.v,
+            times: r.c.slice(1, 7).map(c => c?.f || c?.v || '')
           };
         }).filter(r => r && r.date >= new Date(today.getFullYear(), today.getMonth(), today.getDate()));
-
-        const next7 = parsed.slice(0, 7);
-        if (next7.length === 0) {
-          document.getElementById("prayer-table-placeholder").textContent = "No data available.";
-          return;
-        }
-
+        const next7 = parsedRows.slice(0, 7);
         const table = document.createElement('table');
-        table.innerHTML = `
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Fajr</th>
-              <th>Sunrise</th>
-              <th>Dhuhr</th>
-              <th>Asr</th>
-              <th>Maghrib</th>
-              <th>Isha</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${next7.map(row => `
-              <tr class="${row.date.toDateString() === today.toDateString() ? 'highlight-row' : ''}">
-                <td>${row.dateStr}</td>
-                ${row.times.map(t => `<td>${t}</td>`).join('')}
-              </tr>
-            `).join('')}
-          </tbody>
-        `;
-        const container = document.getElementById("prayer-table-placeholder");
+        const thead = document.createElement('thead');
+        thead.innerHTML = `<tr><th>Date</th><th>Fajr</th><th>Sunrise</th><th>Dhuhr</th><th>Asr</th><th>Maghrib</th><th>Isha</th></tr>`;
+        const tbody = document.createElement('tbody');
+        next7.forEach(r => {
+          const tr = document.createElement('tr');
+          if (r.date.toDateString() === today.toDateString()) tr.classList.add('highlight-row');
+          const dateDisplay = `${r.date.getDate().toString().padStart(2,'0')}/${(r.date.getMonth()+1).toString().padStart(2,'0')}/${r.date.getFullYear()}`;
+          tr.innerHTML = `<td>${dateDisplay}</td>${r.times.map(t => `<td>${t}</td>`).join('')}`;
+          tbody.appendChild(tr);
+        });
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        const container = document.getElementById('prayer-table-placeholder');
         container.innerHTML = '';
         container.appendChild(table);
-      } catch (err) {
-        console.error(err);
-        document.getElementById("prayer-table-placeholder").textContent = "Error loading table.";
+      } catch (e) {
+        console.error('Failed loading weekly data', e);
+        document.getElementById("prayer-table-placeholder").textContent = "Failed to load weekly data.";
       }
     }
 
-    // Init
-    updateClock();
-    fetchPrayerTimes();
-    loadWeeklyPrayerTable();
-    setInterval(updateClock, 1000);
-    setInterval(fetchPrayerTimes, 60000);
-    setInterval(loadWeeklyPrayerTable, 60000);
+    window.onload = function () {
+      updateClock();
+      updateDates();
+      setPrayerHeadingWithDay();
+      fetchPrayerTimesFromSheet();
+      loadWeeklyPrayerTimes();
 
-    // Slideshow
-    let slideIndex = 0;
-    const slides = document.querySelectorAll(".slide-container");
-    setInterval(() => {
-      slides[slideIndex].classList.remove("active");
-      slideIndex = (slideIndex + 1) % slides.length;
-      slides[slideIndex].classList.add("active");
-    }, 10000);
+      setInterval(updateClock, 1000);
+      setInterval(updateDates, 60000);
+      setInterval(fetchPrayerTimesFromSheet, 60000);
+      setInterval(loadWeeklyPrayerTimes, 60000);
+
+      let slideIndex = 0;
+      const slides = document.querySelectorAll('.slide-container');
+      function showNextSlide() {
+        slides[slideIndex].classList.remove('active');
+        slideIndex = (slideIndex + 1) % slides.length;
+        slides[slideIndex].classList.add('active');
+      }
+      setInterval(showNextSlide, 5000);
+    };
   </script>
 </body>
 </html>
