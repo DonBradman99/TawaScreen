@@ -229,6 +229,7 @@
       document.getElementById('minutes').textContent = m.toString().padStart(2, '0');
       document.getElementById('seconds').textContent = s.toString().padStart(2, '0') + ' ' + ampm;
     }
+
     function updateDates() {
       const now = new Date();
       const day = now.getDate(), month = now.getMonth() + 1, year = now.getFullYear();
@@ -272,19 +273,20 @@
         const html = names.map((n, i) => {
           const [h, m] = times[i].split(':').map(Number);
           const t = new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
-          const upcoming = !found && t > now;
-          if (upcoming) found = true;
-          // Strip seconds if present
-let displayTime = times[i];
-if (displayTime.includes(':')) {
-  const parts = displayTime.split(':');
-  if (parts.length >= 2) {
-    displayTime = parts[0] + ':' + parts[1];
-  }
-}
 
-return `<div class="${upcoming ? 'highlight' : ''}">${n}: ${displayTime}</div>`;
+          const isNextPrayer = !found && t > now;
+          if (isNextPrayer) found = true;
 
+          // Strip seconds if present (just in case)
+          let displayTime = times[i];
+          if (displayTime.includes(':')) {
+            const parts = displayTime.split(':');
+            if (parts.length >= 2) {
+              displayTime = parts[0] + ':' + parts[1];
+            }
+          }
+
+          return `<div class="${isNextPrayer ? 'highlight' : ''}">${n}: ${displayTime}</div>`;
         }).join('');
         document.getElementById("prayer-times").innerHTML = html;
       } catch (e) {
@@ -297,6 +299,7 @@ return `<div class="${upcoming ? 'highlight' : ''}">${n}: ${displayTime}</div>`;
     updateDates();
     setPrayerHeadingWithDay();
     fetchPrayerTimesFromSheet();
+
     setInterval(updateClock, 1000);
     setInterval(updateDates, 60000);
     setInterval(fetchPrayerTimesFromSheet, 60000);
