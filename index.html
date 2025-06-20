@@ -201,9 +201,10 @@
       text-align: center;
     }
     #weekly-prayer-table thead tr {
-      background-color: #003366;
-      color: white;
-    }
+  background-color: #007a99;
+  color: white;
+}
+
     #weekly-prayer-table tbody tr.highlight-row {
       background-color: #003366;
       color: white;
@@ -249,6 +250,12 @@
       <!-- Other Slides -->
       <div class="slide-container">
         <iframe src="https://docs.google.com/document/d/e/2PACX-1vTDQudPX6qWfceZb2HjmFRUbVPhsAki6no8zl0PhrOebp5nmot4uDS9YCohNwPP9Fc_NGTCIr46NPOv/pub?embedded=true" allowfullscreen></iframe>
+      </div>
+      <div class="slide-container">
+        <div id="weekly-prayer-table">
+          <h2 style="text-align:center; color:#003366; margin-bottom: 12px;">Prayer Times for the Next 7 Days</h2>
+          <div id="prayer-table-placeholder" style="height: 520px;">Loading weekly prayer times...</div>
+        </div>
       </div>
       <div class="slide-container">
         <iframe src="https://docs.google.com/document/d/e/2PACX-1vTyXAgoO4vLLJaDVn0doQ5f6fyNFnzLThPGFw6eUcFnQosVzkU7cWxZL6cSZM7a_8a7dymRjZHMMM-Y/pub?embedded=true" allowfullscreen></iframe>
@@ -390,7 +397,7 @@
         slideIndex = (slideIndex + 1) % slides.length;
         slides[slideIndex].classList.add('active');
       }
-      setInterval(showNextSlide, 5000);
+      setInterval(showNextSlide, 6000);
     };
   </script>
 </body>
