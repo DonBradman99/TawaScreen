@@ -304,7 +304,11 @@
           return;
         }
         const names = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
-        const times = row.c.slice(1, 7).map(c => c?.f || c?.v || '');
+        const times = row.c.slice(1, 7).map(c => {
+  const fullTime = c?.f || c?.v || '';
+  return fullTime.split(':').slice(0, 2).join(':');
+});
+
         const now = new Date();
         const prayerTimes = times.map(timeStr => {
           let [h, m] = timeStr.split(':').map(Number);
