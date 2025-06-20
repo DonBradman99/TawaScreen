@@ -247,53 +247,66 @@
     }
 
     async function fetchPrayerTimesFromSheet() {
-      const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
-      const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
-      try {
-        const res = await fetch(url);
-        const text = await res.text();
-        const json = JSON.parse(text.substr(47).slice(0, -2));
-        const rows = json.table.rows;
+  const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
+  const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
+  try {
+    const res = await fetch(url);
+    const text = await res.text();
+    const json = JSON.parse(text.substr(47).slice(0, -2));
+    const rows = json.table.rows;
 
-        const today = new Date();
-        const todayStr = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+    const today = new Date();
+    const todayStr = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
 
-        let row = rows.find(r => {
-          const d = r.c[0]?.f || r.c[0]?.v;
-          return d === todayStr;
-        });
+    let row = rows.find(r => {
+      const d = r.c[0]?.f || r.c[0]?.v;
+      return d === todayStr;
+    });
 
-        if (!row) return document.getElementById("prayer-times").textContent = "No prayer times for today.";
-
-        const names = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
-        const times = row.c.slice(1).map(c => c?.f || c?.v || '');
-
-        const now = new Date();
-        let found = false;
-        const html = names.map((n, i) => {
-          const [h, m] = times[i].split(':').map(Number);
-          const t = new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
-
-          const isNextPrayer = !found && t > now;
-          if (isNextPrayer) found = true;
-
-          // Strip seconds if present (just in case)
-          let displayTime = times[i];
-          if (displayTime.includes(':')) {
-            const parts = displayTime.split(':');
-            if (parts.length >= 2) {
-              displayTime = parts[0] + ':' + parts[1];
-            }
-          }
-
-          return `<div class="${isNextPrayer ? 'highlight' : ''}">${n}: ${displayTime}</div>`;
-        }).join('');
-        document.getElementById("prayer-times").innerHTML = html;
-      } catch (e) {
-        console.error(e);
-        document.getElementById("prayer-times").textContent = "Failed to load prayer times.";
-      }
+    if (!row) {
+      document.getElementById("prayer-times").textContent = "No prayer times for today.";
+      return;
     }
+
+    const names = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
+    const times = row.c.slice(1).map(c => c?.f || c?.v || '');
+
+    const now = new Date();
+
+    // Build array of prayer Date objects for today
+    const prayerTimes = times.map(timeStr => {
+      const [h, m] = timeStr.split(':').map(Number);
+      return new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
+    });
+
+    // Find next prayer index
+    let nextPrayerIndex = prayerTimes.findIndex(t => t > now);
+
+    // If no next prayer (all times passed), highlight first prayer (Fajr) as next day
+    if (nextPrayerIndex === -1) nextPrayerIndex = 0;
+
+    // Build HTML
+    const html = names.map((name, i) => {
+      // Strip seconds if present in time string
+      let displayTime = times[i];
+      if (displayTime.includes(':')) {
+        const parts = displayTime.split(':');
+        if (parts.length >= 2) {
+          displayTime = parts[0] + ':' + parts[1];
+        }
+      }
+
+      return `<div class="${i === nextPrayerIndex ? 'highlight' : ''}">${name}: ${displayTime}</div>`;
+    }).join('');
+
+    document.getElementById("prayer-times").innerHTML = html;
+
+  } catch (e) {
+    console.error(e);
+    document.getElementById("prayer-times").textContent = "Failed to load prayer times.";
+  }
+}
+
 
     updateClock();
     updateDates();
