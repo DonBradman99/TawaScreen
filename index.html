@@ -213,7 +213,7 @@
 #weekly-prayer-table {
   position: relative;
   top: -20px;     /* move upward */
-  left: -20px;    /* move left */
+  left: -10px;    /* move left */
 }
 
   </style>
@@ -256,12 +256,6 @@
       <!-- Other Slides -->
       <div class="slide-container">
         <iframe src="https://docs.google.com/document/d/e/2PACX-1vTDQudPX6qWfceZb2HjmFRUbVPhsAki6no8zl0PhrOebp5nmot4uDS9YCohNwPP9Fc_NGTCIr46NPOv/pub?embedded=true" allowfullscreen></iframe>
-      </div>
-      <div class="slide-container">
-        <div id="weekly-prayer-table">
-          <h2 style="text-align:center; color:#003366; margin-bottom: 12px;">Prayer Times for the Next 7 Days</h2>
-          <div id="prayer-table-placeholder" style="height: 520px;">Loading weekly prayer times...</div>
-        </div>
       </div>
       <div class="slide-container">
         <iframe src="https://docs.google.com/document/d/e/2PACX-1vTyXAgoO4vLLJaDVn0doQ5f6fyNFnzLThPGFw6eUcFnQosVzkU7cWxZL6cSZM7a_8a7dymRjZHMMM-Y/pub?embedded=true" allowfullscreen></iframe>
@@ -397,13 +391,22 @@
       setInterval(loadWeeklyPrayerTimes, 60000);
 
       let slideIndex = 0;
-      const slides = document.querySelectorAll('.slide-container');
-      function showNextSlide() {
-        slides[slideIndex].classList.remove('active');
-        slideIndex = (slideIndex + 1) % slides.length;
-        slides[slideIndex].classList.add('active');
-      }
-      setInterval(showNextSlide, 6000);
+const slides = document.querySelectorAll('.slide-container');
+
+function showNextSlide() {
+  slides[slideIndex].classList.remove('active');
+  slideIndex = (slideIndex + 1) % slides.length;
+  slides[slideIndex].classList.add('active');
+
+  // Clear existing timer and set a new one based on slide index
+  clearTimeout(window.slideTimer);
+  const isWeeklyTable = slides[slideIndex].querySelector('#weekly-prayer-table');
+  const delay = isWeeklyTable ? 8000 : 5000; // 8 sec for prayer table, 5 sec for others
+  window.slideTimer = setTimeout(showNextSlide, delay);
+}
+
+      showNextSlide(); // custom timer already handled inside function
+
     };
   </script>
 </body>
