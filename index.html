@@ -274,7 +274,17 @@
           const t = new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
           const upcoming = !found && t > now;
           if (upcoming) found = true;
-          return `<div class="${upcoming ? 'highlight' : ''}">${n}: ${times[i]}</div>`;
+          // Strip seconds if present
+let displayTime = times[i];
+if (displayTime.includes(':')) {
+  const parts = displayTime.split(':');
+  if (parts.length >= 2) {
+    displayTime = parts[0] + ':' + parts[1];
+  }
+}
+
+return `<div class="${upcoming ? 'highlight' : ''}">${n}: ${displayTime}</div>`;
+
         }).join('');
         document.getElementById("prayer-times").innerHTML = html;
       } catch (e) {
