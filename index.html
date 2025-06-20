@@ -297,7 +297,13 @@
         }
       }
 
-      return `<div class="${i === nextPrayerIndex ? 'highlight' : ''}">${name}: ${displayTime}</div>`;
+      return `
+  <div class="${upcoming ? 'highlight' : ''}" style="text-align: center;">
+    <div style="font-size: 0.9em;">${n}</div>
+    <div style="font-size: 1.1em;">${times[i]}</div>
+  </div>
+`;
+
     }).join('');
 
     document.getElementById("prayer-times").innerHTML = html;
