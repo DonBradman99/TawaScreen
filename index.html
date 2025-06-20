@@ -135,7 +135,6 @@
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
       font-weight: 600;
-      font-weight: bold;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       backdrop-filter: blur(8px);
     }
@@ -173,7 +172,6 @@
       flex-direction: column;
       gap: 6px;
       font-size: 1.15em;
-      font-weight: bold;
     }
     .highlight {
       background-color: #003366 !important;
@@ -187,15 +185,17 @@
       70% { box-shadow: 0 0 10px 10px rgba(0, 51, 102, 0); }
       100% { box-shadow: 0 0 0 0 rgba(0, 51, 102, 0); }
     }
-    /* Table styles */
+
+    /* Weekly table styles */
     #weekly-prayer-table table {
       width: 100%;
+      height: 100%;
       border-collapse: collapse;
-      font-size: 1.2em;
+      font-size: 1.6em;
     }
     #weekly-prayer-table th, #weekly-prayer-table td {
       border: 1px solid #ccc;
-      padding: 8px;
+      padding: 14px 6px;
       text-align: center;
     }
     #weekly-prayer-table thead tr {
@@ -211,9 +211,7 @@
 </head>
 <body>
 
-  <div id="header">
-    <h1>Tawa Islamic Centre</h1>
-  </div>
+  <div id="header"><h1>Tawa Islamic Centre</h1></div>
 
   <div id="left-panel">
     <div id="logo"><img src="logo.png" alt="Logo" /></div>
@@ -233,30 +231,25 @@
 
   <div id="main-content">
     <div id="slideshow">
-      <!-- Welcome Image Slide -->
+      <!-- Slide 1: Welcome -->
       <div class="slide-container active">
-        <img src="welcome.png" alt="Slide 1" />
+        <img src="welcome.png" alt="Welcome" />
       </div>
 
-      <!-- New Weekly Prayer Times Slide -->
+      <!-- Slide 2: Weekly Prayer Table -->
       <div class="slide-container">
         <div id="weekly-prayer-table">
           <h2 style="text-align:center; color:#003366; margin-bottom: 12px;">Prayer Times for the Next 7 Days</h2>
-          <div id="prayer-table-placeholder" style="height: 520px; overflow-y: auto; color: #555;">Loading weekly prayer times...</div>
+          <div id="prayer-table-placeholder" style="height: 520px;">Loading weekly prayer times...</div>
         </div>
       </div>
 
-      <!-- Existing iframe slides -->
-      
+      <!-- Other Slides -->
       <div class="slide-container">
         <iframe src="https://docs.google.com/document/d/e/2PACX-1vTDQudPX6qWfceZb2HjmFRUbVPhsAki6no8zl0PhrOebp5nmot4uDS9YCohNwPP9Fc_NGTCIr46NPOv/pub?embedded=true" allowfullscreen></iframe>
       </div>
-      
       <div class="slide-container">
         <iframe src="https://docs.google.com/document/d/e/2PACX-1vTyXAgoO4vLLJaDVn0doQ5f6fyNFnzLThPGFw6eUcFnQosVzkU7cWxZL6cSZM7a_8a7dymRjZHMMM-Y/pub?embedded=true" allowfullscreen></iframe>
-      </div>
-      <div class="slide-container">
-        <iframe src="https://docs.google.com/document/d/e/2PACX-1vTafQsJmDn_crsv8m5mkRNtRL5dXzBQY_38qtsUf4FbaxeabKWjxbIzSbZ3ddwzj2fbKoyghUyIpjm9/pub?embedded=true" allowfullscreen></iframe>
       </div>
     </div>
   </div>
@@ -296,66 +289,31 @@
     async function fetchPrayerTimesFromSheet() {
       const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
       const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
-
       try {
         const res = await fetch(url);
         const text = await res.text();
         const json = JSON.parse(text.substr(47).slice(0, -2));
         const rows = json.table.rows;
-
         const today = new Date();
         const todayStr = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
-
-        let row = rows.find(r => {
-          const d = r.c[0]?.f || r.c[0]?.v;
-          return d === todayStr;
-        });
-
+        let row = rows.find(r => (r.c[0]?.f || r.c[0]?.v) === todayStr);
         if (!row) {
           document.getElementById("prayer-times").textContent = "No prayer times for today.";
           return;
         }
-
         const names = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
-        const times = row.c.slice(1).map(c => c?.f || c?.v || '');
-
+        const times = row.c.slice(1, 7).map(c => c?.f || c?.v || '');
         const now = new Date();
-
-        // Convert time strings to Date objects
         const prayerTimes = times.map(timeStr => {
           let [h, m] = timeStr.split(':').map(Number);
-
-          if (h < 24 && m < 60) {
-            return new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
-          } else {
-            return null;
-          }
+          return new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
         });
-
-        let nextPrayerIndex = prayerTimes.findIndex(t => t && t > now);
+        let nextPrayerIndex = prayerTimes.findIndex(t => t > now);
         if (nextPrayerIndex === -1) nextPrayerIndex = 0;
-
         const html = names.map((name, i) => {
-          let displayTime = times[i];
-          if (displayTime.includes(':')) {
-            const parts = displayTime.split(':');
-            if (parts.length >= 2) {
-              displayTime = parts[0] + ':' + parts[1];
-            }
-          }
-
-          const isNext = i === nextPrayerIndex;
-
-          return `
-            <div class="${isNext ? 'highlight' : ''}" style="text-align: center;">
-              <div style="font-size: 0.9em;">${name}</div>
-              <div style="font-size: 1.1em;">${displayTime}</div>
-            </div>
-          `;
+          return `<div class="${i === nextPrayerIndex ? 'highlight' : ''}" style="text-align:center;"><div>${name}</div><div>${times[i]}</div></div>`;
         }).join('');
-
         document.getElementById("prayer-times").innerHTML = html;
-
       } catch (e) {
         console.error("Failed to fetch prayer times:", e);
         document.getElementById("prayer-times").textContent = "Failed to load prayer times.";
@@ -365,96 +323,42 @@
     async function loadWeeklyPrayerTimes() {
       const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
       const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
-
       try {
         const res = await fetch(url);
         const text = await res.text();
         const json = JSON.parse(text.substr(47).slice(0, -2));
         const rows = json.table.rows;
-
         const today = new Date();
-
-        // Parse sheet rows into objects with Date and times
         const parsedRows = rows.map(r => {
           const dateCell = r.c[0];
           if (!dateCell) return null;
-          const dateStr = dateCell.f || dateCell.v;
-          if (!dateStr) return null;
-
-          // Assuming date format is dd/mm/yyyy or d/m/yyyy
-          const parts = dateStr.split('/');
-          if (parts.length !== 3) return null;
-          const day = parseInt(parts[0], 10);
-          const month = parseInt(parts[1], 10);
-          const year = parseInt(parts[2], 10);
-          const date = new Date(year, month - 1, day);
-
+          const parts = (dateCell.f || dateCell.v).split('/');
+          const date = new Date(+parts[2], parts[1]-1, +parts[0]);
           return {
             date,
-            dateStr,
-            times: r.c.slice(1).map(c => c?.f || c?.v || '')
+            dateStr: dateCell.f || dateCell.v,
+            times: r.c.slice(1, 7).map(c => c?.f || c?.v || '')
           };
-        }).filter(r => r && r.date >= new Date(today.getFullYear(), today.getMonth(), today.getDate())); // from today onward
-
-        // Get next 7 days only
+        }).filter(r => r && r.date >= new Date(today.getFullYear(), today.getMonth(), today.getDate()));
         const next7 = parsedRows.slice(0, 7);
-
-        if (next7.length === 0) {
-          document.getElementById("prayer-table-placeholder").textContent = "No data available.";
-          return;
-        }
-
-        // Build table element
         const table = document.createElement('table');
-
-        // Table header
         const thead = document.createElement('thead');
-        thead.innerHTML = `
-          <tr>
-            <th>Date</th>
-            <th>Fajr</th>
-            <th>Sunrise</th>
-            <th>Dhuhr</th>
-            <th>Asr</th>
-            <th>Maghrib</th>
-            <th>Isha</th>
-          </tr>
-        `;
-        table.appendChild(thead);
-
-        // Table body
+        thead.innerHTML = `<tr><th>Date</th><th>Fajr</th><th>Sunrise</th><th>Dhuhr</th><th>Asr</th><th>Maghrib</th><th>Isha</th></tr>`;
         const tbody = document.createElement('tbody');
-
-        next7.forEach(row => {
+        next7.forEach(r => {
           const tr = document.createElement('tr');
-
-          // Highlight if this row is today
-          const isToday = row.date.toDateString() === today.toDateString();
-          if (isToday) {
-            tr.classList.add('highlight-row');
-          }
-
-          // Format date nicely dd/mm/yyyy
-          const day = row.date.getDate();
-          const month = row.date.getMonth() + 1;
-          const year = row.date.getFullYear();
-          const dateDisplay = `${day.toString().padStart(2,'0')}/${month.toString().padStart(2,'0')}/${year}`;
-
-          tr.innerHTML = `
-            <td>${dateDisplay}</td>
-            ${row.times.map(t => `<td>${t}</td>`).join('')}
-          `;
+          if (r.date.toDateString() === today.toDateString()) tr.classList.add('highlight-row');
+          const dateDisplay = `${r.date.getDate().toString().padStart(2,'0')}/${(r.date.getMonth()+1).toString().padStart(2,'0')}/${r.date.getFullYear()}`;
+          tr.innerHTML = `<td>${dateDisplay}</td>${r.times.map(t => `<td>${t}</td>`).join('')}`;
           tbody.appendChild(tr);
         });
-
+        table.appendChild(thead);
         table.appendChild(tbody);
-
         const container = document.getElementById('prayer-table-placeholder');
         container.innerHTML = '';
         container.appendChild(table);
-
-      } catch (err) {
-        console.error('Error loading weekly prayer times:', err);
+      } catch (e) {
+        console.error('Failed loading weekly data', e);
         document.getElementById("prayer-table-placeholder").textContent = "Failed to load weekly data.";
       }
     }
@@ -471,18 +375,13 @@
       setInterval(fetchPrayerTimesFromSheet, 60000);
       setInterval(loadWeeklyPrayerTimes, 60000);
 
-      // Slideshow logic
       let slideIndex = 0;
       const slides = document.querySelectorAll('.slide-container');
-
       function showNextSlide() {
-        if (slides.length === 0) return;
-
         slides[slideIndex].classList.remove('active');
         slideIndex = (slideIndex + 1) % slides.length;
         slides[slideIndex].classList.add('active');
       }
-
       setInterval(showNextSlide, 5000);
     };
   </script>
