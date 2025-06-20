@@ -250,6 +250,7 @@
     async function fetchPrayerTimesFromSheet() {
   const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
   const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
+
   try {
     const res = await fetch(url);
     const text = await res.text();
@@ -274,47 +275,49 @@
 
     const now = new Date();
 
-    // Build array of prayer Date objects for today
+    // Convert time strings to Date objects
     const prayerTimes = times.map(timeStr => {
-      const [h, m] = timeStr.split(':').map(Number);
-      return new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
+      let [h, m] = timeStr.split(':').map(Number);
+
+      // Adjust for 12 AM/PM logic if needed (optional, based on your sheet input)
+      if (h < 24 && m < 60) {
+        return new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
+      } else {
+        return null;
+      }
     });
 
-    // Find next prayer index
-    let nextPrayerIndex = prayerTimes.findIndex(t => t > now);
-
-    // If no next prayer (all times passed), highlight first prayer (Fajr) as next day
+    let nextPrayerIndex = prayerTimes.findIndex(t => t && t > now);
     if (nextPrayerIndex === -1) nextPrayerIndex = 0;
 
-    // Build HTML
     const html = names.map((name, i) => {
-  // Strip seconds if present in time string
-  let displayTime = times[i];
-  if (displayTime.includes(':')) {
-    const parts = displayTime.split(':');
-    if (parts.length >= 2) {
-      displayTime = parts[0] + ':' + parts[1];
-    }
-  }
+      // Strip seconds if present
+      let displayTime = times[i];
+      if (displayTime.includes(':')) {
+        const parts = displayTime.split(':');
+        if (parts.length >= 2) {
+          displayTime = parts[0] + ':' + parts[1];
+        }
+      }
 
-  const isNext = i === nextPrayerIndex;
+      const isNext = i === nextPrayerIndex;
 
-  return `
-    <div class="${isNext ? 'highlight' : ''}" style="text-align: center;">
-      <div style="font-size: 0.9em;">${name}</div>
-      <div style="font-size: 1.1em;">${displayTime}</div>
-    </div>
-  `;
-}).join('');
-
+      return `
+        <div class="${isNext ? 'highlight' : ''}" style="text-align: center;">
+          <div style="font-size: 0.9em;">${name}</div>
+          <div style="font-size: 1.1em;">${displayTime}</div>
+        </div>
+      `;
+    }).join('');
 
     document.getElementById("prayer-times").innerHTML = html;
 
   } catch (e) {
-    console.error(e);
+    console.error("Failed to fetch prayer times:", e);
     document.getElementById("prayer-times").textContent = "Failed to load prayer times.";
   }
 }
+
 
 
     updateClock();
