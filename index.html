@@ -14,168 +14,38 @@
       font-weight: bold;
       margin: 0;
       padding: 0;
-      height: 100vh;
       overflow: hidden;
-      box-sizing: border-box;
-      position: relative;
-    }
-    #header {
-      width: 100%;
-      text-align: center;
-      padding: 1px 0;
-      position: fixed;
-      top: -8px;
-      left: 0;
-      z-index: 500;
     }
     h1 {
       font-family: 'Playfair Display', serif;
       font-size: 4em;
-      margin: 0;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      margin: 0.3em 0 0.2em;
       color: #003366;
-    }
-    #left-panel {
-      position: fixed;
-      top: 10px;
-      left: 25px;
-      width: 200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      z-index: 900;
-    }
-    #logo, #side-image {
-      width: 100%;
-      height: 230px;
-    }
-    #logo img, #side-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
     }
     #clock {
-      margin-top: 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 5em;
+      text-align: center;
+      font-size: 3.5em;
       color: #003366;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+      margin-bottom: 10px;
       user-select: none;
-      margin-bottom: 20px;
-    }
-    #time-top-line {
-      display: flex;
-      gap: 0.2em;
-      font-weight: bold;
     }
     #seconds {
       display: none;
     }
-    #main-content {
-      position: absolute;
-      top: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    #slideshow {
-      width: 850px;
-      height: 600px;
-      position: relative;
-      overflow: hidden;
-      border-radius: 3px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      background-color: white;
-    }
-    .slide-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .slide-container.active {
-      opacity: 1;
-      z-index: 1;
-    }
-    .slide-container img,
-    .slide-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      object-fit: contain;
-    }
-    #bottom-bar {
-      position: absolute;
-      bottom: 3px;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 1200px;
-      width: 95%;
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 24px;
-      font-size: 1.7em;
-      color: #222;
-      background: #f9f7f4;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
-      font-weight: bold;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      backdrop-filter: blur(8px);
-    }
-    #date-container, #bank-details {
-      white-space: nowrap;
-      border: 1px solid #ccc;
-      padding: 3px 8px;
-      border-radius: 5px;
-    }
-    #right-panel {
-      position: fixed;
-      top: 30px;
-      right: 10px;
-      width: 200px;
-      background: #f9f7f4;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
-      padding: 12px 16px;
-      font-size: 1.6em;
-      color: #222;
-      font-weight: 600;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      z-index: 900;
-    }
-    #right-panel h2 {
-      font-size: 1.2em;
-      margin-bottom: 8px;
-      color: #003366;
-      text-align: center;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 4px;
-    }
     #prayer-times {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      font-size: 1.4em;
-      font-weight: bold;
+      align-items: center;
+      font-size: 2em;
+      gap: 10px;
+      margin-top: 10px;
     }
     .highlight {
-      background-color: #003366 !important;
-      color: white !important;
-      padding: 3px 6px;
-      border-radius: 5px;
+      background-color: #003366;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 8px;
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
@@ -183,67 +53,83 @@
       70% { box-shadow: 0 0 10px 10px rgba(0, 51, 102, 0); }
       100% { box-shadow: 0 0 0 0 rgba(0, 51, 102, 0); }
     }
-    #weekly-prayer-table table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 1.5em;
-    }
-    #weekly-prayer-table th, #weekly-prayer-table td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-    }
-    #weekly-prayer-table thead tr {
-      background-color: #003366;
-      color: white;
-    }
-    #weekly-prayer-table tbody tr.highlight-row {
-      background-color: #003366;
-      color: white;
-      animation: pulse 2s infinite;
-    }
   </style>
 </head>
 <body>
-<!-- The body remains unchanged -->
-<script>
-function fetchPrayerTimesFromSheet() {
-  const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
-  const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
 
-  fetch(url)
-    .then(res => res.text())
-    .then(text => {
-      const json = JSON.parse(text.substr(47).slice(0, -2));
-      const rows = json.table.rows;
-      const today = new Date();
-      const todayStr = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
-      const todayRow = rows.find(r => (r.c[0]?.f || r.c[0]?.v) === todayStr);
-      if (!todayRow) return;
+  <h1>Tawa Islamic Centre</h1>
+  <div id="clock">
+    <span id="hours"></span>:<span id="minutes"></span>
+    <div id="seconds"></div>
+  </div>
+  <div id="prayer-times">Loading...</div>
 
-      const names = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
-      const times = todayRow.c.slice(1).map(c => c?.f || c?.v || '');
+  <script>
+    function updateClock() {
       const now = new Date();
+      let h = now.getHours();
+      let m = now.getMinutes();
+      h = h % 12 || 12;
+      document.getElementById('hours').textContent = h.toString().padStart(2, '0');
+      document.getElementById('minutes').textContent = m.toString().padStart(2, '0');
+    }
 
-      const prayerTimes = times.map(t => {
-        const [h, m] = t.split(':').map(Number);
-        return new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
-      });
+    async function fetchPrayerTimes() {
+      const sheetID = '1AunLHACQEUcIeIrcwXafAEpVn1dq39gLGJVIyL8QzV0';
+      const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
 
-      let nextIndex = prayerTimes.findIndex(pt => pt > now);
-      if (nextIndex === -1) nextIndex = 0;
+      try {
+        const res = await fetch(url);
+        const text = await res.text();
+        const json = JSON.parse(text.substr(47).slice(0, -2));
+        const rows = json.table.rows;
 
-      document.getElementById("prayer-times").innerHTML = names.map((n, i) => {
-        const [h, m] = times[i].split(":").map(Number);
-        const formatted = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
-        return `
-          <div class="${i === nextIndex ? 'highlight' : ''}" style="text-align:center;">
-            <div>${n}</div>
-            <div>${formatted}</div>
-          </div>`;
-      }).join('');
-    });
-}
-</script>
+        const today = new Date();
+        const todayStr = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+
+        const row = rows.find(r => {
+          const cell = r.c[0];
+          if (!cell) return false;
+          const date = cell.f || cell.v;
+          return date === todayStr;
+        });
+
+        if (!row) {
+          document.getElementById("prayer-times").textContent = "No data for today.";
+          return;
+        }
+
+        const names = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
+        const times = row.c.slice(1).map(c => c?.f || c?.v || '');
+
+        const now = new Date();
+        const prayerDates = times.map(t => {
+          const [h, m] = t.split(':').map(Number);
+          return new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
+        });
+
+        let nextIndex = prayerDates.findIndex(pt => pt > now);
+        if (nextIndex === -1) nextIndex = 0;
+
+        const html = names.map((name, i) => `
+          <div class="${i === nextIndex ? 'highlight' : ''}">
+            <div>${name}</div>
+            <div>${times[i]}</div>
+          </div>
+        `).join('');
+
+        document.getElementById("prayer-times").innerHTML = html;
+
+      } catch (e) {
+        console.error(e);
+        document.getElementById("prayer-times").textContent = "Error loading times.";
+      }
+    }
+
+    updateClock();
+    fetchPrayerTimes();
+    setInterval(updateClock, 1000);
+    setInterval(fetchPrayerTimes, 60000);
+  </script>
 </body>
 </html>
