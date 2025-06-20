@@ -444,7 +444,7 @@ function showNextSlide() {
   // Clear existing timer and set a new one based on slide index
   clearTimeout(window.slideTimer);
   const isWeeklyTable = slides[slideIndex].querySelector('#weekly-prayer-table');
-  const delay = isWeeklyTable ? 8000 : 5000; // 8 sec for prayer table, 5 sec for others
+  const delay = isWeeklyTable ? 10000 : 8000; // 8 sec for prayer table, 5 sec for others
   window.slideTimer = setTimeout(showNextSlide, delay);
 }
 
