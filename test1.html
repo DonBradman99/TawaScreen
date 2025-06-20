@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tawa Islamic Centre</title>
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      background-color: #f9f9f9;
+      color: black;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    #header {
+      width: 100%;
+      text-align: center;
+      padding: 1px 0;
+      position: fixed;
+      top: -8px;
+      left: 0;
+      z-index: 500;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 4em;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      color: #003366;
+    }
+
+    #left-panel {
+      position: fixed;
+      top: 10px;
+      left: 25px;
+      width: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      z-index: 900;
+    }
+
+    #logo, #side-image {
+      width: 100%;
+      height: 230px;
+    }
+
+    #logo img, #side-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    #clock {
+      margin-top: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 5em;
+      color: #003366;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+      user-select: none;
+      margin-bottom: 20px;
+    }
+
+    #time-top-line {
+      display: flex;
+      gap: 0.2em;
+      font-weight: bold;
+    }
+
+    #seconds {
+      line-height: 1em;
+      font-weight: normal;
+      margin-top: 0.1em;
+      font-size: .7em;
+    }
+
+    #main-content {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #slideshow {
+      width: 850px;
+      height: 600px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      background-color: white;
+    }
+
+    .slide-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .slide-container.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .slide-container img,
+    .slide-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      object-fit: contain;
+    }
+
+    #bottom-bar {
+      position: absolute;
+      bottom: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 1200px;
+      width: 95%;
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 24px;
+      font-size: 1.7em;
+      color: #222;
+      background: #f9f7f4;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+      font-weight: 600;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    #date-container, #bank-details {
+      white-space: nowrap;
+      border: 1px solid #ccc;
+      padding: 3px 8px;
+      border-radius: 5px;
+    }
+
+    /* Right-side prayer times panel */
+    #right-panel {
+      position: fixed;
+      top: 200px;
+      right: 15px;
+      width: 200px;
+      background: #f9f7f4;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+      padding: 12px 16px;
+      font-size: 1.6em;
+      color: #222;
+      font-weight: 600;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 900;
+    }
+
+    #right-panel h2 {
+      font-size: 1.2em;
+      margin-bottom: 8px;
+      color: #003366;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4px;
+    }
+
+    #prayer-times {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.95em;
+    }
+    
+    .highlight {
+      background-color: #003366;
+      color: white;
+      padding: 3px 6px;
+      border-radius: 5px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(0, 51, 102, 0.6); }
+      70% { box-shadow: 0 0 10px 10px rgba(0, 51, 102, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 51, 102, 0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div id="header">
+    <h1>Tawa Islamic Centre</h1>
+  </div>
+
+  <!-- Left Panel -->
+  <div id="left-panel">
+    <div id="logo">
+      <img src="logo.png" alt="Tawa Islamic Centre Logo" />
+    </div>
+    
+    <div id="clock">
+      <div id="time-top-line">
+        <div id="hours"></div>
+        <div>:</div>
+        <div id="minutes"></div>
+      </div>
+      <div id="seconds"></div>
+    </div>
+    <div id="side-image">
+      <img src="flag.jpg" alt="Flag Image" />
+    </div>
+  </div>
+
+  <!-- Right Panel: Prayer Times -->
+  <div id="right-panel">
+    <h2 id="prayer-heading">Prayer Times</h2>
+    <div id="prayer-times">Loading...</div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="main-content">
+    <div id="slideshow">
+      <div class="slide-container active">
+        <img src="welcome.png" alt="Slide 1" />
+      </div>
+      <div class="slide-container">
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vTafQsJmDn_crsv8m5mkRNtRL5dXzBQY_38qtsUf4FbaxeabKWjxbIzSbZ3ddwzj2fbKoyghUyIpjm9/pub?embedded=true" allowfullscreen></iframe>
+      </div>
+      <div class="slide-container">
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vTDQudPX6qWfceZb2HjmFRUbVPhsAki6no8zl0PhrOebp5nmot4uDS9YCohNwPP9Fc_NGTCIr46NPOv/pub?embedded=true" allowfullscreen></iframe>
+      </div>
+      <div class="slide-container">
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vTafQsJmDn_crsv8m5mkRNtRL5dXzBQY_38qtsUf4FbaxeabKWjxbIzSbZ3ddwzj2fbKoyghUyIpjm9/pub?embedded=true" allowfullscreen></iframe>
+      </div>
+      <div class="slide-container">
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vTyXAgoO4vLLJaDVn0doQ5f6fyNFnzLThPGFw6eUcFnQosVzkU7cWxZL6cSZM7a_8a7dymRjZHMMM-Y/pub?embedded=true" allowfullscreen></iframe>
+      </div>
+      <div class="slide-container">
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vTafQsJmDn_crsv8m5mkRNtRL5dXzBQY_38qtsUf4FbaxeabKWjxbIzSbZ3ddwzj2fbKoyghUyIpjm9/pub?embedded=true" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div id="bottom-bar">
+    <div id="date-container">
+      <span id="english-date"></span> | <span id="islamic-date"></span>
+    </div>
+    <div id="bank-details">
+      ASB Bank Account: <strong>12-3223-0160160-000</strong>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Clock and Date Functions
+    function updateDates() {
+      const now = new Date();
+      const day = now.getDate().toString().padStart(2, '0');
+      const month = (now.getMonth() + 1).toString().padStart(2, '0');
+      const year = now.getFullYear();
+      document.getElementById('english-date').textContent = `${day}/${month}/${year}`;
+
+      let islamicDateStr = '';
+      try {
+        islamicDateStr = new Intl.DateTimeFormat('en-TN-u-ca-islamic', {
+          month: 'long',
+          year: 'numeric'
+        }).format(now);
+      } catch (e) {
+        islamicDateStr = 'Islamic date not supported';
+      }
+      document.getElementById('islamic-date').textContent = islamicDateStr;
+    }
+
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+
+      document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+      document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+      document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0') + ' ' + ampm;
+    }
+
+    setInterval(updateClock, 1000);
+    setInterval(updateDates, 60000);
+    updateDates();
+    updateClock();
+
+    // Slideshow Functions
+    const slides = document.querySelectorAll('.slide-container');
+    let currentSlide = 0;
+    const durations = [4000, 4000, 4000, 6000];
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+    }
+
+    function startSlideshow() {
+      showSlide(currentSlide);
+      setTimeout(() => {
+        currentSlide = (currentSlide + 1) % slides.length;
+        startSlideshow();
+      }, durations[currentSlide]);
+    }
+
+    startSlideshow();
+
+    // Update prayer heading with day name
+    function setPrayerHeadingWithDay() {
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const today = new Date();
+      const dayName = days[today.getDay()];
+      document.getElementById("prayer-heading").textContent = `${dayName} Prayer Times`;
+    }
+    setPrayerHeadingWithDay();
+
+    // Fetch prayer times including Sunrise from Google Sheet
+    async function fetchPrayerTimesFromSheet() {
+      try {
+        const sheetID = '1YF5drcrpEQ3KsmyZ3LcMn-1dF0vxVeyk_yYaxwr5wyw';
+        const sheetName = 'Sheet1';
+
+        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${sheetName}`;
+
+        const response = await fetch(url);
+        const text = await response.text();
+
+        const json = JSON.parse(text.substr(47).slice(0, -2));
+
+        const rows = json.table.rows;
+
+        const today = new Date();
+        const todayStr = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+
+        let todayRow = null;
+
+        for (const row of rows) {
+          if (!row.c[0] || !row.c[0].f) continue;
+          if (row.c[0].f === todayStr) {
+            todayRow = row;
+            break;
+          }
+        }
+
+        if (!todayRow) {
+          document.getElementById("prayer-times").textContent = "No prayer times for today.";
+          return;
+        }
+
+        // Column indexes based on your sheet:
+        // 0: Date, 1: Fajr, 2: Sunrise, 3: Duhur, 4: Asr, 5: Maghrib, 6: Isha
+        const fajr = todayRow.c[1]?.v || '';
+        const sunrise = todayRow.c[2]?.v || '';
+        const dhuhr = todayRow.c[3]?.v || '';
+        const asr = todayRow.c[4]?.v || '';
+        const maghrib = todayRow.c[5]?.v || '';
+        const isha = todayRow.c[6]?.v || '';
+
+        const prayers = [
+          { name: 'Fajr', time: fajr },
+          { name: 'Sunrise', time: sunrise },
+          { name: 'Dhuhr', time: dhuhr },
+          { name: 'Asr', time: asr },
+          { name: 'Maghrib', time: maghrib },
+          { name: 'Isha', time: isha }
+        ];
+
+        const now = new Date();
+        let foundNext = false;
+
+        const prayerTimesHTML = prayers.map(prayer => {
+          // Parse time HH:mm format into date object for comparison
+          const [h, m] = prayer.time.split(':').map(Number);
+          const prayerDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m);
+
+          const isNext = !foundNext && prayerDate > now;
+          if (isNext) foundNext = true;
+
+          return `<div class="${isNext ? 'highlight' : ''}">${prayer.name}: ${prayer.time}</div>`;
+        }).join('');
+
+        document.getElementById('prayer-times').innerHTML = prayerTimesHTML;
+
+      } catch (error) {
+        console.error('Failed to fetch prayer times:', error);
+        document.getElementById('prayer-times').textContent = "Failed to load prayer times.";
+      }
+    }
+
+    fetchPrayerTimesFromSheet();
+    setInterval(fetchPrayerTimesFromSheet, 60000);
+
+  </script>
+</body>
+</html>
