@@ -120,7 +120,9 @@
       width: 100%;
       height: 100%;
       border: none;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center center; /* centers image */
+      background-color: white;       /* fills empty space */
     }
     #bottom-bar {
       position: absolute;
@@ -464,6 +466,7 @@ function showNextSlide() {
   </script>
 </body>
 </html>
+
 
 
 
