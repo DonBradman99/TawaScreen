@@ -92,7 +92,8 @@
     }
     #slideshow {
       width: 850px;
-      height: 600px;
+        height: calc(100vh - 100px); 
+        margin-bottom: 20px;
       position: relative;
       overflow: hidden;
       border-radius: 3px;
@@ -202,7 +203,7 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 1.4em;
+  font-size: 1.8em;
   background-color: #fff;
   border-radius: 12px;
   overflow: hidden;
@@ -219,7 +220,7 @@
 
 #weekly-prayer-table th,
 #weekly-prayer-table td {
-  padding: 16px 10px;
+  padding: 20px 14px;
   text-align: center;
   border-bottom: 1px solid #ddd;
   border-right: 1px solid black; /* Thin white line between columns */
@@ -462,4 +463,5 @@ function showNextSlide() {
   </script>
 </body>
 </html>
+
 
