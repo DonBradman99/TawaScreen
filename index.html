@@ -83,7 +83,7 @@
     }
     #main-content {
       position: absolute;
-      top: 80px;
+      top: 5px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
@@ -258,7 +258,8 @@
 </head>
 <body>
 
-  <div id="header"><h1>Tawa Islamic Centre</h1></div>
+  <!-- <div id="header"><h1>Tawa Islamic Centre</h1></div> -->
+ 
 
   <div id="left-panel">
     <div id="logo"><img src="logo.png" alt="Logo" /></div>
@@ -434,7 +435,7 @@
       setPrayerHeadingWithDay();
       fetchPrayerTimesFromSheet();
       loadWeeklyPrayerTimes();
-
+      setInterval(setPrayerHeadingWithDay, 60000); // update day name every minute
       setInterval(updateClock, 1000);
       setInterval(updateDates, 60000);
       setInterval(fetchPrayerTimesFromSheet, 60000);
@@ -451,7 +452,7 @@ function showNextSlide() {
   // Clear existing timer and set a new one based on slide index
   clearTimeout(window.slideTimer);
   const isWeeklyTable = slides[slideIndex].querySelector('#weekly-prayer-table');
-  const delay = isWeeklyTable ? 10000 : 8000; // 8 sec for prayer table, 5 sec for others
+  const delay = isWeeklyTable ? 12000 : 10000; // 8 sec for prayer table, 5 sec for others
   window.slideTimer = setTimeout(showNextSlide, delay);
 }
 
@@ -461,3 +462,4 @@ function showNextSlide() {
   </script>
 </body>
 </html>
+
