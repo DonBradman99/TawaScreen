@@ -418,7 +418,7 @@
           const tr = document.createElement('tr');
           if (r.date.toDateString() === today.toDateString()) tr.classList.add('highlight-row');
           // Format date as dd/mm/yyyy for display
-          const dateDisplay = `${r.date.getDate().toString().padStart(2,'0')}/${(r.date.getMonth()+1).toString().padStart(2,'0')}/${r.date.getFullYear()}`;
+          const dateDisplay = `${r.date.getDate().toString().padStart(2,'0')}/${(r.date.getMonth()+1).toString().padStart(2,'0')}`;
           tr.innerHTML = `<td>${dateDisplay}</td>${r.times.map(t => `<td>${t}</td>`).join('')}`;
           tbody.appendChild(tr);
         });
@@ -466,6 +466,7 @@ function showNextSlide() {
   </script>
 </body>
 </html>
+
 
 
 
