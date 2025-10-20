@@ -303,6 +303,9 @@
       <div class="slide-container">
         <iframe src="https://docs.google.com/document/d/e/2PACX-1vTyXAgoO4vLLJaDVn0doQ5f6fyNFnzLThPGFw6eUcFnQosVzkU7cWxZL6cSZM7a_8a7dymRjZHMMM-Y/pub?embedded=true" allowfullscreen></iframe>
       </div>
+      <div class="slide-container">
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vSEQ0eS1PAaR0Gt6QZSuaH_ShmjRVmQRsHySbRUxuFkZZP3k5T-lKNd7nxS177Wi8pUb5uPVN9z2aVu/pub?embedded=true" allowfullscreen></iframe>
+      </div>
     </div>
   </div>
 
@@ -456,7 +459,7 @@ function showNextSlide() {
   // Clear existing timer and set a new one based on slide index
   clearTimeout(window.slideTimer);
   const isWeeklyTable = slides[slideIndex].querySelector('#weekly-prayer-table');
-  const delay = isWeeklyTable ? 12000 : 10000; // 8 sec for prayer table, 5 sec for others
+  const delay = isWeeklyTable ? 13000 : 11000; // 8 sec for prayer table, 5 sec for others
   window.slideTimer = setTimeout(showNextSlide, delay);
 }
 
@@ -466,6 +469,7 @@ function showNextSlide() {
   </script>
 </body>
 </html>
+
 
 
 
