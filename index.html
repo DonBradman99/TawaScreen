@@ -257,7 +257,24 @@
   top: -30px;     /* move upward */
   left: -5px;    /* move left */
 }
+/* --- Prayer Times Right Panel Styling --- */
+#prayer-times > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 5px 0;
+}
 
+#prayer-times > div > div:first-child {
+  font-size: 0.8em; /* smaller prayer name */
+  opacity: 0.8;
+}
+
+#prayer-times > div > div:last-child {
+  font-size: 1.4em; /* larger prayer time */
+  font-weight: bold;
+  color: #003366;
+}
   </style>
 </head>
 <body>
@@ -466,27 +483,11 @@ function showNextSlide() {
       showNextSlide(); // custom timer already handled inside function
 
     };
-/* --- Prayer Times Right Panel Styling --- */
-#prayer-times > div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 5px 0;
-}
 
-#prayer-times > div > div:first-child {
-  font-size: 0.8em; /* smaller prayer name */
-  opacity: 0.8;
-}
-
-#prayer-times > div > div:last-child {
-  font-size: 1.4em; /* larger prayer time */
-  font-weight: bold;
-  color: #003366;
-}
   </script>
 </body>
 </html>
+
 
 
 
