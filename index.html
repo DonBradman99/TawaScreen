@@ -125,25 +125,23 @@
       background-color: white;       /* fills empty space */
     }
     #bottom-bar {
-      position: absolute;
-      bottom: 3px;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 1200px;
-      width: 95%;
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 24px;
-      font-size: 1.7em;
-      color: white;
-      background: #007a99;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
-      font-weight: 620;
-      font-weight: bold;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      backdrop-filter: blur(8px);
-    }
+  position: absolute;
+  bottom: 3px;
+  left: 25px; /* aligns with left panel start */
+  right: 200px; /* stops before right panel (adjust to your panel width) */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  font-size: 1.7em;
+  color: white;
+  background: #007a99;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  backdrop-filter: blur(8px);
+}
     #date-container, #bank-details {
       white-space: nowrap;
       border: 1px solid #ccc;
@@ -487,6 +485,7 @@ function showNextSlide() {
   </script>
 </body>
 </html>
+
 
 
 
